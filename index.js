@@ -1,0 +1,59 @@
+const calculateBtn = document.querySelector('#calculateBtn')
+const salaryInput = document.querySelector('#salary')
+
+const grossItemValue = document.querySelector('#grossSalary')
+const casItemValue = document.querySelector('#cas')
+const cassItemValue = document.querySelector('#cass')
+const netItemValue = document.querySelector('#netSalary')
+
+const barGreen = document.querySelector('.bar-green')
+const barRed = document.querySelector('.bar-red')
+
+calculateBtn.addEventListener('click', () =>{
+    console.log(salaryInput.value);
+    const grossSalaryValue = Number(salaryInput.value)
+    console.log(grossSalaryValue)
+
+    if(isValidInput(grossSalaryValue)){
+        //Aici se fac calcule
+        const casValue = Math.round(0.25 * grossSalaryValue)
+        const cassValue = Math.round(0.10 * grossSalaryValue)
+        const netSalaryValue = grossSalaryValue - casValue - cassValue
+
+        grossItemValue.innerHTML = `${grossSalaryValue} Ron`
+        casItemValue.innerHTML = `${casValue} Ron`
+        cassItemValue.innerHTML = `${cassValue} Ron`
+        netItemValue.innerHTML = `${netSalaryValue} Ron`
+
+        const netSalaryPercent = Math.round(netSalaryValue * 100 / grossSalaryValue)
+        const taxesPercent = Math.round((casValue + cassValue) * 100 /grossSalaryValue)
+
+        barGreen.style.width = `${netSalaryPercent}%`
+        barGreen.innerHTML = `${netSalaryValue} Ron`
+        barRed.style.width = `${taxesPercent}%`
+        barRed.innerHTML = `${casValue + cassValue} Ron`
+    }
+})
+
+function isValidInput(value){
+    if(value === 0){
+        setError('Valoare mai mare decat 0')
+        return false
+    }
+    if(!Number.isInteger(value)){
+        setError('Valoarea sa fie un numar intreg')
+        return false
+    }
+    setError('')
+    return true;
+}
+
+function setError(message){
+    const errorContainer = document.querySelector('.error-message')
+    if(message === ''){
+        errorContainer.style.display = 'none'
+    } else{
+            errorContainer.innerHTML = message
+            errorContainer.style.display = 'block'
+    }
+}
